@@ -1,18 +1,16 @@
 ﻿/*
-                                                   Задача #1:
+                                                   Задача #2:
 
-Представим банк, в котором алгоритм начисления процента по вкладу зависит от суммы вклада. На вход будет
-    подаваться число (сумма вклада). При значении меньше 100, будет начислено 5 %, если значение находится 
-        в диапазоне от ста до двухсот — 7 %, если больше — 10 %. 
+Немного усложним "Задачу #1". Пусть банк регулярно начисляет по всем вкладам не только положенные 
+    по договору проценты, но еще и бонусы. И пусть, к примеру, банк решит выполнить доначисление по всем 
+        клиентским вкладам в размере 15 единиц без учета суммы. 
 
-Отработав, программа должна вывести общую сумму с начисленными процентами. Для решения этой задачи воспользуемся 
-    выражением Convert.ToDouble(Console.ReadLine()), которое нам пригодится для получения вводимого с 
-        клавиатуры числа.
+Поменяем программу, отображенную выше, чтобы к итоговой сумме были добавлены еще и бонусы.
 
  */
 
 
-namespace Task_1
+namespace Task_2
 {
     internal class Program
     {
@@ -24,7 +22,8 @@ namespace Task_1
             client.Deposit(depositAmount);
 
             ColorConsole.WriteLine(
-                $"\nYour total balance (interest included) is ${client.Balance}", ConsoleColor.Green);
+                $"\nYour total balance (interest and bonus included) is ${client.Balance.ToString("F2")}", 
+                    ConsoleColor.Green);
 
             Console.Write("\nPress any key to continue . . .");
             Console.ReadLine();
@@ -63,19 +62,21 @@ namespace Task_1
     internal class BankAccount
     {
         private double _balance;
+        private double _bonus;
 
         public BankAccount()
         {
             _balance = 0.0;
+            _bonus = 15.0;
         }
 
-        public double Balance => Math.Round(_balance, 2);
+        public double Balance => _balance;
 
         public void Deposit(double depositAmount)
         {
             double interestRate = GetInterestRate(depositAmount);
             double interest = depositAmount * interestRate;
-            double totalBalance = depositAmount + interest;
+            double totalBalance = depositAmount + interest + _bonus;
 
             _balance += totalBalance;
         }
